@@ -1,3 +1,10 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.service.RolePermissionService;
+
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/api/role-permissions")
 public class RolePermissionController {

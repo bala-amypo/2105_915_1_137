@@ -1,3 +1,11 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.entity.Permission;
+import com.example.demo.service.PermissionService;
+
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/api/permissions")
 public class PermissionController {

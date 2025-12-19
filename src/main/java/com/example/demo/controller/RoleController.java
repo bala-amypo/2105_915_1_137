@@ -1,3 +1,11 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.entity.Role;
+import com.example.demo.service.RoleService;
+
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/api/roles")
 public class RoleController {
