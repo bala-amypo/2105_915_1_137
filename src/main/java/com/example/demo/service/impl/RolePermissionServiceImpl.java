@@ -23,7 +23,8 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
     @Override
     public List<RolePermission> getPermissionsForRole(Long roleId) {
-        return rolePermissionRepository.findByRoleId(roleId);
+        // ✅ FIXED METHOD NAME
+        return rolePermissionRepository.findByRole_Id(roleId);
     }
 
     @Override
