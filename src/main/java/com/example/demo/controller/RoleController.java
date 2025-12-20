@@ -3,8 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.Role;
 import com.example.demo.service.RoleService;
-
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")
@@ -16,13 +17,17 @@ public class RoleController {
         this.service = service;
     }
 
+    // CREATE Role
     @PostMapping
-    public ApiResponse create(@RequestBody Role role) {
-        return new ApiResponse(true, "Role created", service.create(role));
+    public ApiResponse createRole(@RequestBody Role role) {
+        Role saved = service.createRole(role);
+        return new ApiResponse(true, "Role created successfully", saved);
     }
 
+    // GET ALL Roles
     @GetMapping
-    public ApiResponse list() {
-        return new ApiResponse(true, "Roles", service.getAll());
+    public ApiResponse getAllRoles() {
+        List<Role> list = service.getAllRoles();
+        return new ApiResponse(true, "Roles fetched successfully", list);
     }
 }

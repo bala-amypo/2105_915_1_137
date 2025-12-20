@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ApiResponse;
+import com.example.demo.entity.RolePermission;
 import com.example.demo.service.RolePermissionService;
-
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/role-permissions")
@@ -15,10 +17,17 @@ public class RolePermissionController {
         this.service = service;
     }
 
+    // ASSIGN Permission to Role
     @PostMapping
-    public ApiResponse assign(@RequestParam Long roleId,
-                              @RequestParam Long permissionId) {
-        return new ApiResponse(true, "Assigned",
-                service.assign(roleId, permissionId));
+    public ApiResponse assignPermission(@RequestBody RolePermission mapping) {
+        RolePermission saved = service.grantPermission(mapping);
+        return new ApiResponse(true, "Permission assigned to role", saved);
+    }
+
+    // GET permissions by Role ID
+    @GetMapping("/role/{roleId}")
+    public ApiResponse getPermissionsByRole(@PathVariable Long roleId) {
+        List<RolePermission> list = service.getPermissionsForRole(roleId);
+        return new ApiResponse(true, "Role permissions fetched", list);
     }
 }
