@@ -26,3 +26,5 @@ public class PermissionController {
         return new ApiResponse(true, "Permissions", service.getAll());
     }
 }
+service.createPermission(permission);
+service.getAllPermissions();
