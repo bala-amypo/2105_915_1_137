@@ -19,7 +19,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
 
-    // ✅ Constructor MUST match test case
     public RolePermissionServiceImpl(
             RolePermissionRepository rolePermissionRepository,
             RoleRepository roleRepository,
@@ -37,9 +36,33 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         Long permissionId = mapping.getPermission().getId();
 
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Role not found"));
 
         Permission permission = permissionRepository.findById(permissionId)
-                .orElseThrow(() -> new ResourceNotFoundException("Permission not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Permission not found"));
 
         mapping.setRole(role);
+        mapping.setPermission(permission);
+
+        return rolePermissionRepository.save(mapping);
+    }
+
+    @Override
+    public List<RolePermission> getPermissionsForRole(Long roleId) {
+        return rolePermissionRepository.findByRole_Id(roleId);
+    }
+
+    @Override
+    public RolePermission getMappingById(Long id) {
+        return rolePermissionRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("RolePermission not found"));
+    }
+
+    @Override
+    public void revokePermission(Long id) {
+        rolePermissionRepository.deleteById(id);
+    }
+}
