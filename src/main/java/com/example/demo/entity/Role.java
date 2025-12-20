@@ -3,26 +3,34 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "roles")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false)
+
     private String name;
 
+    private boolean active;
 
-    public Role() {}
+    // getters & setters
+    public Long getId() {
+        return id;
+    }
 
-    public Role(String name) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Long getId() { return id; }
+    public boolean isActive() {
+        return active;
+    }
 
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
