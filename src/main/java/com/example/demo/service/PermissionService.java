@@ -2,8 +2,16 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Permission;
 import java.util.List;
-@Service
+
 public interface PermissionService {
-    Permission create(Permission permission);
-    List<Permission> getAll();
+
+    Permission createPermission(Permission permission);
+
+    Permission updatePermission(Long id, Permission permission);
+
+    Permission getPermissionById(Long id);
+
+    List<Permission> getAllPermissions();
+
+    void deactivatePermission(Long id);
 }
