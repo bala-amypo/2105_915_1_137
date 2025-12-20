@@ -28,21 +28,22 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRoleById(Long id) {
-        return roleRepository.findById(id).orElse(null);
+        return roleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
     }
 
     @Override
     public Role updateRole(Long id, Role role) {
-        role.setId(id);
-        return roleRepository.save(role);
+        Role existingRole = getRoleById(id);
+        existingRole.setName(role.getName());
+        existingRole.setActive(role.isActive());
+        return roleRepository.save(existingRole);
     }
 
     @Override
     public void deactivateRole(Long id) {
         Role role = getRoleById(id);
-        if (role != null) {
-            role.setActive(false);
-            roleRepository.save(role);
-        }
+        role.setActive(false);
+        roleRepository.save(role);
     }
 }
