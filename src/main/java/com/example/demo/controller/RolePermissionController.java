@@ -17,14 +17,14 @@ public class RolePermissionController {
         this.service = service;
     }
 
-    // ASSIGN Permission to Role
+    
     @PostMapping
     public ApiResponse assignPermission(@RequestBody RolePermission mapping) {
         RolePermission saved = service.grantPermission(mapping);
         return new ApiResponse(true, "Permission assigned to role", saved);
     }
 
-    // GET permissions by Role ID
+    
     @GetMapping("/role/{roleId}")
     public ApiResponse getPermissionsByRole(@PathVariable Long roleId) {
         List<RolePermission> list = service.getPermissionsForRole(roleId);

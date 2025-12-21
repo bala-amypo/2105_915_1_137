@@ -19,7 +19,7 @@ public class UserRoleController {
     private final UserAccountRepository userAccountRepository;
     private final RoleRepository roleRepository;
 
-    // ✅ constructor injection
+    
     public UserRoleController(UserRoleRepository userRoleRepository,
                               UserAccountRepository userAccountRepository,
                               RoleRepository roleRepository) {
@@ -28,7 +28,7 @@ public class UserRoleController {
         this.roleRepository = roleRepository;
     }
 
-    // Assign role to user
+    
     @PostMapping
     public UserRole assignRole(@RequestParam Long userId,
                                @RequestParam Long roleId) {
@@ -45,7 +45,7 @@ public class UserRoleController {
         return userRoleRepository.save(userRole);
     }
 
-    // Get roles of a user
+    
     @GetMapping("/user/{userId}")
     public List<UserRole> getRolesForUser(@PathVariable Long userId) {
         return userRoleRepository.findByUser_Id(userId);

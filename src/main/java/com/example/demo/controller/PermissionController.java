@@ -17,14 +17,14 @@ public class PermissionController {
         this.service = service;
     }
 
-    // CREATE Permission
+    
     @PostMapping
     public ApiResponse createPermission(@RequestBody Permission permission) {
         Permission saved = service.createPermission(permission);
         return new ApiResponse(true, "Permission created successfully", saved);
     }
 
-    // GET ALL Permissions
+   
     @GetMapping
     public ApiResponse getAllPermissions() {
         List<Permission> list = service.getAllPermissions();

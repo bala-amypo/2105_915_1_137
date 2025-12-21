@@ -17,14 +17,14 @@ public class RoleController {
         this.service = service;
     }
 
-    // CREATE Role
+    
     @PostMapping
     public ApiResponse createRole(@RequestBody Role role) {
         Role saved = service.createRole(role);
         return new ApiResponse(true, "Role created successfully", saved);
     }
 
-    // GET ALL Roles
+    
     @GetMapping
     public ApiResponse getAllRoles() {
         List<Role> list = service.getAllRoles();

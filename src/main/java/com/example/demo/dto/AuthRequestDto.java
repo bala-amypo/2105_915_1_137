@@ -9,13 +9,13 @@ public class AuthRequestDto {
     public AuthRequestDto() {
     }
 
-    // All-args constructor
+    
     public AuthRequestDto(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    // Getters & Setters
+    
     public String getEmail() {
         return email;
     }
