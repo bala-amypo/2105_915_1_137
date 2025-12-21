@@ -19,7 +19,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final UserAccountRepository userAccountRepository;
     private final RoleRepository roleRepository;
 
-    // ✅ constructor
+    
     public UserRoleServiceImpl(UserRoleRepository userRoleRepository,
                                UserAccountRepository userAccountRepository,
                                RoleRepository roleRepository) {
