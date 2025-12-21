@@ -10,6 +10,7 @@ public interface RolePermissionService {
     List<RolePermission> getPermissionsForRole(Long roleId);
 
     RolePermission getMappingById(Long id);
-
+    
     void revokePermission(Long mappingId);
 }
+
