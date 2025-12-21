@@ -5,7 +5,7 @@ public class AuthRequestDto {
     private String email;
     private String password;
 
-    // No-args constructor
+   
     public AuthRequestDto() {
     }
 

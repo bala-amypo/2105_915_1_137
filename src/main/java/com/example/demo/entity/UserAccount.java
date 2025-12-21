@@ -49,7 +49,7 @@ public class UserAccount {
         this.updatedAt = Instant.now();
     }
 
-    // getters and setters
+    
     public Long getId() { return id; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

@@ -5,17 +5,17 @@ public class AuthResponseDto {
     private String token;
     private String email;
 
-    // No-args constructor
+    
     public AuthResponseDto() {
     }
 
-    // All-args constructor
+   
     public AuthResponseDto(String token, String email) {
         this.token = token;
         this.email = email;
     }
 
-    // Getters & Setters
+    
     public String getToken() {
         return token;
     }

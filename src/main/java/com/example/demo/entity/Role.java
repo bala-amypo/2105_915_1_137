@@ -14,7 +14,7 @@ public class Role {
 
     private boolean active = true;
 
-    // getters & setters
+    
     public Long getId() {
         return id;
     }

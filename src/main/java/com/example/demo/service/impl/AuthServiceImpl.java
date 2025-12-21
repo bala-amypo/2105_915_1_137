@@ -12,7 +12,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserAccountRepository userAccountRepository;
 
-    // ✅ constructor
+    
     public AuthServiceImpl(UserAccountRepository userAccountRepository) {
         this.userAccountRepository = userAccountRepository;
     }
@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Invalid credentials"));
 
-        // ⚠️ password check placeholder (safe for now)
+        
         if (user.getPassword() == null ||
                 !user.getPassword().equals(password)) {
             throw new BadRequestException("Invalid credentials");

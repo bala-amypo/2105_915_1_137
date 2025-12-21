@@ -14,7 +14,7 @@ public class Permission {
 
     private boolean active = true;
 
-    // getters & setters
+    
     public Long getId() {
         return id;
     }

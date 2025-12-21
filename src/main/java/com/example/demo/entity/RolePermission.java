@@ -25,10 +25,7 @@ public class RolePermission {
         this.grantedAt = Instant.now();
     }
 
-    // ======================
-    // GETTERS
-    // ======================
-
+   
     public Long getId() {
         return id;
     }
@@ -45,10 +42,7 @@ public class RolePermission {
         return grantedAt;
     }
 
-    // ======================
-    // SETTERS  ⭐ IMPORTANT ⭐
-    // ======================
-
+    
     public void setId(Long id) {
         this.id = id;
     }
