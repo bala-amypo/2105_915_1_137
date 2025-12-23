@@ -10,17 +10,40 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String permissionKey;
+
     private String description;
-    private Boolean active = true;
 
-    public Permission() {}
+    private boolean active = true;
 
-    public Permission(String permissionKey, String description, Boolean active) {
-        this.permissionKey = permissionKey;
-        this.description = description;
-        this.active = active;
+    /* ================== GETTERS & SETTERS ================== */
+
+    public Long getId() {
+        return id;
     }
 
-    // getters & setters
+    public String getPermissionKey() {
+        return permissionKey;
+    }
+
+    public void setPermissionKey(String permissionKey) {
+        this.permissionKey = permissionKey;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

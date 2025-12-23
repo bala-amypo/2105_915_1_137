@@ -13,9 +13,13 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String email;
+
     private String fullName;
+
     private String password;
+
     private Boolean active = true;
 
     private Instant createdAt;
@@ -23,11 +27,7 @@ public class UserAccount {
 
     public UserAccount() {}
 
-    public UserAccount(String email, String fullName, Boolean active) {
-        this.email = email;
-        this.fullName = fullName;
-        this.active = active;
-    }
+    /* ================== JPA CALLBACKS ================== */
 
     @PrePersist
     public void prePersist() {
@@ -41,5 +41,41 @@ public class UserAccount {
         updatedAt = Instant.now();
     }
 
-    // getters & setters (ALL)
+    /* ================== GETTERS & SETTERS ================== */
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
