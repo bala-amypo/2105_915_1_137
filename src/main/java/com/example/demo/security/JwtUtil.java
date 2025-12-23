@@ -1,9 +1,11 @@
 package com.example.demo.security;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class JwtUtil {
 
     public String generateToken(String username) {
-        // Dummy token (enough for tests)
-        return "TOKEN_" + username;
+        return "DUMMY_JWT_TOKEN";
     }
 }
