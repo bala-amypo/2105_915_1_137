@@ -2,33 +2,21 @@ package com.example.demo.dto;
 
 public class AuthResponseDto {
 
-    private String token;
+    private String message;
     private String email;
 
-    
-    public AuthResponseDto() {
-    }
+    public AuthResponseDto() {}
 
-   
-    public AuthResponseDto(String token, String email) {
-        this.token = token;
+    public AuthResponseDto(String message, String email) {
+        this.message = message;
         this.email = email;
     }
 
-    
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+    public String getMessage() {
+        return message;
     }
 
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }
