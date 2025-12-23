@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import org.springframework.stereotype.Service;
@@ -10,15 +12,19 @@ import java.util.List;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository repository;
+    private final UserAccountRepository repo;
 
-    public UserAccountServiceImpl(UserAccountRepository repository) {
-        this.repository = repository;
+    public UserAccountServiceImpl(UserAccountRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        return repository.save(user);
+        if (repo.existsByEmail(user.getEmail())) {
+            throw new BadRequestException("Email exists");
+        }
+        user.setActive(true);
+        return repo.save(user);
     }
 
     @Override
@@ -26,26 +32,24 @@ public class UserAccountServiceImpl implements UserAccountService {
         UserAccount existing = getUserById(id);
         existing.setEmail(user.getEmail());
         existing.setFullName(user.getFullName());
-        existing.setPassword(user.getPassword());
-        existing.setActive(user.isActive());
-        return repository.save(existing);
+        return repo.save(existing);
     }
 
     @Override
     public UserAccount getUserById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
     public List<UserAccount> getAllUsers() {
-        return repository.findAll();
+        return repo.findAll();
     }
 
     @Override
     public void deactivateUser(Long id) {
         UserAccount user = getUserById(id);
         user.setActive(false);
-        repository.save(user);
+        repo.save(user);
     }
 }
