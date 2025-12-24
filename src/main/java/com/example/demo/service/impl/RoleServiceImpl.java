@@ -1,43 +1,29 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Role;
-import com.example.demo.exception.BadRequestException;
+import com.example.demo.entity.RolePermission;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.RoleRepository;
-import com.example.demo.service.RoleService;
+import com.example.demo.repository.RolePermissionRepository;
+import com.example.demo.service.RolePermissionService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class RoleServiceImpl implements RoleService {
-    private final RoleRepository roleRepository;
+public class RolePermissionServiceImpl implements RolePermissionService {
+    private final RolePermissionRepository rolePermissionRepository;
 
-    public RoleServiceImpl(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
+    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository) {
+        this.rolePermissionRepository = rolePermissionRepository;
     }
 
     @Override
-    public Role createRole(Role role) {
-        if (roleRepository.findByRoleName(role.getRoleName()).isPresent()) {
-            throw new BadRequestException("Role name already exists");
-        }
-        return roleRepository.save(role);
+    public List<RolePermission> getPermissionsForRole(Long roleId) {
+        return rolePermissionRepository.findByRole_Id(roleId);
     }
 
     @Override
-    public Role updateRole(Long id, Role role) {
-        Role existing = roleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
-        
-        existing.setRoleName(role.getRoleName());
-        existing.setDescription(role.getDescription());
-        return roleRepository.save(existing);
-    }
-
-    @Override
-    public void deactivateRole(Long id) {
-        Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
-        role.setActive(false);
-        roleRepository.save(role);
+    public RolePermission getMappingById(Long id) {
+        return rolePermissionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role permission mapping not found"));
     }
 }

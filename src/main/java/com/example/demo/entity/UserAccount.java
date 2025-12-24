@@ -11,6 +11,7 @@ public class UserAccount {
     
     private String email;
     private String fullName;
+    private String passwordHash;
     private boolean active = true;
     private Instant createdAt;
     private Instant updatedAt;
@@ -32,6 +33,8 @@ public class UserAccount {
     public void setEmail(String email) { this.email = email; }
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
     public Instant getCreatedAt() { return createdAt; }
