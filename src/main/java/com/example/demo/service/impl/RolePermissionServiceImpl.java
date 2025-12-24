@@ -7,7 +7,7 @@ import com.example.demo.service.RolePermissionService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import com.example.demo.entity.RolePermission;
-
+import com.example.demo.exception.ResourceNotFoundException;
 
 @Service
 public class RolePermissionServiceImpl implements RolePermissionService {
