@@ -18,11 +18,12 @@ import java.util.Map;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+    
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
-
+    
     public AuthServiceImpl(UserAccountRepository userAccountRepository,
                           PasswordEncoder passwordEncoder,
                           AuthenticationManager authenticationManager,
@@ -32,23 +33,28 @@ public class AuthServiceImpl implements AuthService {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
-
+    
     @Override
     public AuthResponseDto login(AuthRequestDto request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         
-        UserAccount user = userAccountRepository.findByEmail(request.getEmail()).orElseThrow();
+        UserAccount user = userAccountRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new BadRequestException("User not found"));
+        
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         String token = jwtUtil.generateToken(claims, user.getEmail());
         
-        return new AuthResponseDto(token);
+        AuthResponseDto response = new AuthResponseDto();
+        response.setToken(token);
+        response.setEmail(user.getEmail());
+        return response;
     }
-
+    
     @Override
-    public void register(RegisterRequestDto request) {
+    public AuthResponseDto register(RegisterRequestDto request) {
         if (userAccountRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Email already exists");
         }
@@ -56,7 +62,16 @@ public class AuthServiceImpl implements AuthService {
         UserAccount user = new UserAccount();
         user.setEmail(request.getEmail());
         user.setFullName(request.getFullName());
-        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        userAccountRepository.save(user);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user = userAccountRepository.save(user);
+        
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getId());
+        String token = jwtUtil.generateToken(claims, user.getEmail());
+        
+        AuthResponseDto response = new AuthResponseDto();
+        response.setToken(token);
+        response.setEmail(user.getEmail());
+        return response;
     }
 }

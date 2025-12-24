@@ -6,5 +6,5 @@ import com.example.demo.dto.RegisterRequestDto;
 
 public interface AuthService {
     AuthResponseDto login(AuthRequestDto request);
-    void register(RegisterRequestDto request);
+    AuthResponseDto register(RegisterRequestDto request);
 }

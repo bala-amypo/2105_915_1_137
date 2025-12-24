@@ -9,4 +9,5 @@ public interface UserAccountService {
     UserAccount getUserById(Long id);
     void deactivateUser(Long id);
     List<UserAccount> getAllUsers();
+    void deleteUser(Long id);
 }
