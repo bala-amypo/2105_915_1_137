@@ -28,7 +28,6 @@ public class UserRoleServiceImpl implements UserRoleService {
         this.roleRepository = roleRepository;
     }
 
-    /** ✅ REQUIRED BY INTERFACE */
     @Override
     public UserRole createUserRole(UserRole userRole) {
         Long userId = userRole.getUser().getId();
@@ -79,8 +78,9 @@ public class UserRoleServiceImpl implements UserRoleService {
         return userRoleRepository.findByUser_Id(userId);
     }
 
+    /** ✅ MISSING METHOD — NOW IMPLEMENTED */
     @Override
-    public UserRole getMappingById(Long id) {
+    public UserRole getUserRoleById(Long id) {
         return userRoleRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("UserRole not found with id: " + id)
@@ -94,4 +94,5 @@ public class UserRoleServiceImpl implements UserRoleService {
         }
         userRoleRepository.deleteById(id);
     }
+    
 }

@@ -49,7 +49,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         return rolePermissionRepository.save(existing);
     }
 
-    /** ✅ REQUIRED BY INTERFACE */
     @Override
     public RolePermission getRolePermissionById(Long id) {
         return rolePermissionRepository.findById(id)
@@ -63,6 +62,12 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         return rolePermissionRepository.findByRole_Id(roleId);
     }
 
+    /** ✅ MISSING METHOD — NOW IMPLEMENTED */
+    @Override
+    public List<RolePermission> getAllRolePermissions() {
+        return rolePermissionRepository.findAll();
+    }
+
     @Override
     public void deleteRolePermission(Long id) {
         if (!rolePermissionRepository.existsById(id)) {
@@ -70,4 +75,9 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         }
         rolePermissionRepository.deleteById(id);
     }
+    @Override
+public RolePermission getMappingById(Long id) {
+    return getRolePermissionById(id);
+}
+
 }
