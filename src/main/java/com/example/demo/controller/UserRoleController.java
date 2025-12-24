@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.UserRole;
 import com.example.demo.service.UserRoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,33 +12,37 @@ import java.util.List;
 @RequestMapping("/api/user-roles")
 public class UserRoleController {
 
-    private final UserRoleService userRoleService;
+    @Autowired
+    private UserRoleService userRoleService;
 
-    public UserRoleController(UserRoleService userRoleService) {
-        this.userRoleService = userRoleService;
-    }
-
-    @PostMapping
-    public ResponseEntity<ApiResponse<UserRole>> assignRole(@RequestBody UserRole userRole) {
-        UserRole assigned = userRoleService.assignRole(userRole);
-        return ResponseEntity.ok(ApiResponse.success(assigned));
-    }
-
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<ApiResponse<List<UserRole>>> getRolesForUser(@PathVariable Long userId) {
-        List<UserRole> roles = userRoleService.getRolesForUser(userId);
-        return ResponseEntity.ok(ApiResponse.success(roles));
+    @GetMapping
+    public ResponseEntity<List<UserRole>> getAllUserRoles() {
+        return ResponseEntity.ok(userRoleService.getAllUserRoles());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserRole>> getMappingById(@PathVariable Long id) {
-        UserRole mapping = userRoleService.getMappingById(id);
-        return ResponseEntity.ok(ApiResponse.success(mapping));
+    public ResponseEntity<UserRole> getUserRoleById(@PathVariable Long id) {
+        return ResponseEntity.ok(userRoleService.getUserRoleById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<UserRole> createUserRole(@RequestBody UserRole userRole) {
+        return ResponseEntity.ok(userRoleService.createUserRole(userRole));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserRole> updateUserRole(@PathVariable Long id, @RequestBody UserRole userRole) {
+        return ResponseEntity.ok(userRoleService.updateUserRole(id, userRole));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> removeRole(@PathVariable Long id) {
-        userRoleService.removeRole(id);
-        return ResponseEntity.ok(ApiResponse.success("Role removed successfully"));
+    public ResponseEntity<Void> deleteUserRole(@PathVariable Long id) {
+        userRoleService.deleteUserRole(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<UserRole>> getRolesByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(userRoleService.getRolesByUser(userId));
     }
 }

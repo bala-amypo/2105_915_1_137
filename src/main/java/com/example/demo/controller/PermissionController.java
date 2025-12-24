@@ -1,30 +1,43 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.Permission;
 import com.example.demo.service.PermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/permissions")
 public class PermissionController {
 
-    private final PermissionService permissionService;
+    @Autowired
+    private PermissionService permissionService;
 
-    public PermissionController(PermissionService permissionService) {
-        this.permissionService = permissionService;
+    @GetMapping
+    public ResponseEntity<List<Permission>> getAllPermissions() {
+        return ResponseEntity.ok(permissionService.getAllPermissions());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Permission> getPermissionById(@PathVariable Long id) {
+        return ResponseEntity.ok(permissionService.getPermissionById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Permission>> createPermission(@RequestBody Permission permission) {
-        Permission created = permissionService.createPermission(permission);
-        return ResponseEntity.ok(ApiResponse.success(created));
+    public ResponseEntity<Permission> createPermission(@RequestBody Permission permission) {
+        return ResponseEntity.ok(permissionService.createPermission(permission));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Permission> updatePermission(@PathVariable Long id, @RequestBody Permission permission) {
+        return ResponseEntity.ok(permissionService.updatePermission(id, permission));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> deactivatePermission(@PathVariable Long id) {
-        permissionService.deactivatePermission(id);
-        return ResponseEntity.ok(ApiResponse.success("Permission deactivated successfully"));
+    public ResponseEntity<Void> deletePermission(@PathVariable Long id) {
+        permissionService.deletePermission(id);
+        return ResponseEntity.noContent().build();
     }
 }

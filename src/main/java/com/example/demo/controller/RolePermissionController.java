@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.RolePermission;
 import com.example.demo.service.RolePermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +12,37 @@ import java.util.List;
 @RequestMapping("/api/role-permissions")
 public class RolePermissionController {
 
-    private final RolePermissionService rolePermissionService;
+    @Autowired
+    private RolePermissionService rolePermissionService;
 
-    public RolePermissionController(RolePermissionService rolePermissionService) {
-        this.rolePermissionService = rolePermissionService;
-    }
-
-    @GetMapping("/role/{roleId}")
-    public ResponseEntity<ApiResponse<List<RolePermission>>> getPermissionsForRole(@PathVariable Long roleId) {
-        List<RolePermission> permissions = rolePermissionService.getPermissionsForRole(roleId);
-        return ResponseEntity.ok(ApiResponse.success(permissions));
+    @GetMapping
+    public ResponseEntity<List<RolePermission>> getAllRolePermissions() {
+        return ResponseEntity.ok(rolePermissionService.getAllRolePermissions());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<RolePermission>> getMappingById(@PathVariable Long id) {
-        RolePermission mapping = rolePermissionService.getMappingById(id);
-        return ResponseEntity.ok(ApiResponse.success(mapping));
+    public ResponseEntity<RolePermission> getRolePermissionById(@PathVariable Long id) {
+        return ResponseEntity.ok(rolePermissionService.getRolePermissionById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<RolePermission> createRolePermission(@RequestBody RolePermission rolePermission) {
+        return ResponseEntity.ok(rolePermissionService.createRolePermission(rolePermission));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RolePermission> updateRolePermission(@PathVariable Long id, @RequestBody RolePermission rolePermission) {
+        return ResponseEntity.ok(rolePermissionService.updateRolePermission(id, rolePermission));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRolePermission(@PathVariable Long id) {
+        rolePermissionService.deleteRolePermission(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/role/{roleId}")
+    public ResponseEntity<List<RolePermission>> getPermissionsByRole(@PathVariable Long roleId) {
+        return ResponseEntity.ok(rolePermissionService.getPermissionsByRole(roleId));
     }
 }

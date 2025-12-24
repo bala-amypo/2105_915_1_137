@@ -1,36 +1,43 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.Role;
 import com.example.demo.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")
 public class RoleController {
 
-    private final RoleService roleService;
+    @Autowired
+    private RoleService roleService;
 
-    public RoleController(RoleService roleService) {
-        this.roleService = roleService;
+    @GetMapping
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return ResponseEntity.ok(roleService.getAllRoles());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Role> getRoleById(@PathVariable Long id) {
+        return ResponseEntity.ok(roleService.getRoleById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Role>> createRole(@RequestBody Role role) {
-        Role created = roleService.createRole(role);
-        return ResponseEntity.ok(ApiResponse.success(created));
+    public ResponseEntity<Role> createRole(@RequestBody Role role) {
+        return ResponseEntity.ok(roleService.createRole(role));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Role>> updateRole(@PathVariable Long id, @RequestBody Role role) {
-        Role updated = roleService.updateRole(id, role);
-        return ResponseEntity.ok(ApiResponse.success(updated));
+    public ResponseEntity<Role> updateRole(@PathVariable Long id, @RequestBody Role role) {
+        return ResponseEntity.ok(roleService.updateRole(id, role));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> deactivateRole(@PathVariable Long id) {
-        roleService.deactivateRole(id);
-        return ResponseEntity.ok(ApiResponse.success("Role deactivated successfully"));
+    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
+        roleService.deleteRole(id);
+        return ResponseEntity.noContent().build();
     }
 }

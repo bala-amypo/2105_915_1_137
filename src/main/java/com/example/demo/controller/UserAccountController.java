@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,39 +12,32 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserAccountController {
 
-    private final UserAccountService userAccountService;
-
-    public UserAccountController(UserAccountService userAccountService) {
-        this.userAccountService = userAccountService;
-    }
+    @Autowired
+    private UserAccountService userAccountService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserAccount>>> getAllUsers() {
-        List<UserAccount> users = userAccountService.getAllUsers();
-        return ResponseEntity.ok(ApiResponse.success(users));
+    public ResponseEntity<List<UserAccount>> getAllUsers() {
+        return ResponseEntity.ok(userAccountService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserAccount>> getUserById(@PathVariable Long id) {
-        UserAccount user = userAccountService.getUserById(id);
-        return ResponseEntity.ok(ApiResponse.success(user));
+    public ResponseEntity<UserAccount> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userAccountService.getUserById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserAccount>> createUser(@RequestBody UserAccount user) {
-        UserAccount created = userAccountService.createUser(user);
-        return ResponseEntity.ok(ApiResponse.success(created));
+    public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount user) {
+        return ResponseEntity.ok(userAccountService.createUser(user));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserAccount>> updateUser(@PathVariable Long id, @RequestBody UserAccount user) {
-        UserAccount updated = userAccountService.updateUser(id, user);
-        return ResponseEntity.ok(ApiResponse.success(updated));
+    public ResponseEntity<UserAccount> updateUser(@PathVariable Long id, @RequestBody UserAccount user) {
+        return ResponseEntity.ok(userAccountService.updateUser(id, user));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> deactivateUser(@PathVariable Long id) {
-        userAccountService.deactivateUser(id);
-        return ResponseEntity.ok(ApiResponse.success("User deactivated successfully"));
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userAccountService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
