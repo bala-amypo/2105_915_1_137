@@ -3,6 +3,8 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserRole;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.UserAccountRepository;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRoleRepository;
 import com.example.demo.service.UserRoleService;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,9 @@ public class UserRoleServiceImpl implements UserRoleService {
     
     private final UserRoleRepository userRoleRepository;
     
-    public UserRoleServiceImpl(UserRoleRepository userRoleRepository) {
+    public UserRoleServiceImpl(UserRoleRepository userRoleRepository, 
+                              UserAccountRepository userAccountRepository,
+                              RoleRepository roleRepository) {
         this.userRoleRepository = userRoleRepository;
     }
     
