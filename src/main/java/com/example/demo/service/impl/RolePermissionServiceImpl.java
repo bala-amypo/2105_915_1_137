@@ -30,4 +30,12 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     public List<RolePermission> getPermissionsByRole(Long roleId) {
         return rolePermissionRepository.findByRole_Id(roleId);
     }
+    @Override
+public void deleteRolePermission(Long id) {
+    if (!rolePermissionRepository.existsById(id)) {
+        throw new ResourceNotFoundException("RolePermission not found with id: " + id);
+    }
+    rolePermissionRepository.deleteById(id);
+}
+
 }

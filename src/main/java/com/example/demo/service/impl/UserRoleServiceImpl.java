@@ -5,6 +5,8 @@ import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.UserRoleService;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import com.example.demo.entity.UserRole;
 
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
@@ -21,5 +23,10 @@ public class UserRoleServiceImpl implements UserRoleService {
         this.userRoleRepository = userRoleRepository;
         this.userAccountRepository = userAccountRepository;
         this.roleRepository = roleRepository;
+    }
+
+    @Override
+    public List<UserRole> getRolesByUser(Long userId) {
+        return userRoleRepository.findByUser_Id(userId);
     }
 }
