@@ -17,25 +17,26 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+    
     private final UserAccountRepository userAccountRepository;
     private final UserRoleRepository userRoleRepository;
-
-    public CustomUserDetailsService(UserAccountRepository userAccountRepository, 
+    
+    public CustomUserDetailsService(UserAccountRepository userAccountRepository,
                                   UserRoleRepository userRoleRepository) {
         this.userAccountRepository = userAccountRepository;
         this.userRoleRepository = userRoleRepository;
     }
-
+    
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserAccount user = userAccountRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserAccount user = userAccountRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+        
         List<UserRole> userRoles = userRoleRepository.findByUser_Id(user.getId());
         List<GrantedAuthority> authorities = userRoles.stream()
-                .map(ur -> new SimpleGrantedAuthority(ur.getRole().getRoleName()))
-                .collect(Collectors.toList());
-
-        return new User(user.getEmail(), user.getPasswordHash() != null ? user.getPasswordHash() : "password", authorities);
+            .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().getRoleName()))
+            .collect(Collectors.toList());
+        
+        return new User(user.getEmail(), user.getPassword() != null ? user.getPassword() : "", authorities);
     }
 }
