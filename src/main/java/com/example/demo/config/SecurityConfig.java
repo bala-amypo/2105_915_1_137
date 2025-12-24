@@ -42,7 +42,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/auth/**", "/status", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/h2-console/**").permitAll()
+                .requestMatchers("/api/auth/**", "/status", "/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
