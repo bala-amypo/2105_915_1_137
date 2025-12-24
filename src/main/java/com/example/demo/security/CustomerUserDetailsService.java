@@ -36,6 +36,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .map(ur -> new SimpleGrantedAuthority(ur.getRole().getRoleName()))
                 .collect(Collectors.toList());
 
-        return new User(user.getEmail(), "password", authorities);
+        return new User(user.getEmail(), user.getPasswordHash() != null ? user.getPasswordHash() : "password", authorities);
     }
 }
