@@ -26,9 +26,4 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         return rolePermissionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role permission mapping not found"));
     }
-
-    @Override
-    public RolePermission assignPermissionToRole(RolePermission rolePermission) {
-        return rolePermissionRepository.save(rolePermission);
-    }
 }
