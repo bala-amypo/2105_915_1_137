@@ -26,4 +26,4 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         return rolePermissionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role permission mapping not found"));
     }
-}SaasUserRolePermissionManagerTest.java 
+}
