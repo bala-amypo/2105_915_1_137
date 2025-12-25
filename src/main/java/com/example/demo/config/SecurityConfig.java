@@ -40,33 +40,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable());
+        http
+            .csrf(csrf -> csrf.disable())
+            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+            .authorizeHttpRequests(auth -> auth
 
-        http.authorizeHttpRequests(auth -> auth
-            // ✅ Swagger URLs
-            .requestMatchers(
-                "/v3/api-docs/**",
-                "/swagger-ui/**",
-                "/swagger-ui.html"
-            ).permitAll()
+                // ✅ Swagger URLs
+                .requestMatchers(
+                        "/v3/api-docs",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**"
+                ).permitAll()
 
-            // ✅ Public APIs
-            .requestMatchers("/api/auth/**", "/status", "/h2-console/**").permitAll()
+                // ✅ Auth APIs
+                .requestMatchers("/api/auth/**", "/status", "/h2-console/**")
+                .permitAll()
 
-            // 🔒 Everything else needs JWT
-            .anyRequest().authenticated()
-        );
-
-        http.exceptionHandling(ex ->
-            ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-        );
-
-        http.sessionManagement(session ->
-            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
+                // 🔒 Everything else needs JWT
+                .anyRequest().authenticated()
+            )
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 }
