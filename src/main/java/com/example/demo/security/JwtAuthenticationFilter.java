@@ -1,7 +1,6 @@
 package com.example.demo.security;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -32,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    // ✅ NO throws here (this fixes testCompile errors)
+    // ✅ MUST NOT throw ServletException (tests call this)
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
 
@@ -45,54 +44,60 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || path.startsWith("/h2-console");
     }
 
-    // ✅ MUST declare ServletException here
+    // ✅ REMOVED ServletException from signature (CRITICAL FIX)
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
-            throws ServletException, IOException {
+            throws IOException {
 
-        String requestTokenHeader = request.getHeader("Authorization");
-        String username = null;
-        String jwtToken = null;
+        try {
+            String requestTokenHeader = request.getHeader("Authorization");
+            String username = null;
+            String jwtToken = null;
 
-        if (requestTokenHeader != null &&
-                requestTokenHeader.startsWith("Bearer ")) {
+            if (requestTokenHeader != null &&
+                    requestTokenHeader.startsWith("Bearer ")) {
 
-            jwtToken = requestTokenHeader.substring(7);
-            try {
-                username = jwtUtil.getUsernameFromToken(jwtToken);
-            } catch (Exception e) {
-                logger.error("Unable to get JWT Token", e);
+                jwtToken = requestTokenHeader.substring(7);
+                try {
+                    username = jwtUtil.getUsernameFromToken(jwtToken);
+                } catch (Exception e) {
+                    logger.error("Unable to get JWT Token", e);
+                }
             }
-        }
 
-        if (username != null &&
-                SecurityContextHolder.getContext()
-                        .getAuthentication() == null) {
+            if (username != null &&
+                    SecurityContextHolder.getContext()
+                            .getAuthentication() == null) {
 
-            UserDetails userDetails =
-                    userDetailsService.loadUserByUsername(username);
+                UserDetails userDetails =
+                        userDetailsService.loadUserByUsername(username);
 
-            if (jwtUtil.validateToken(jwtToken, userDetails)) {
+                if (jwtUtil.validateToken(jwtToken, userDetails)) {
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource()
-                                .buildDetails(request)
-                );
+                    authentication.setDetails(
+                            new WebAuthenticationDetailsSource()
+                                    .buildDetails(request)
+                    );
 
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
+                    SecurityContextHolder.getContext()
+                            .setAuthentication(authentication);
+                }
             }
-        }
 
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+
+        } catch (jakarta.servlet.ServletException ex) {
+            // ✅ Convert checked exception to unchecked (TEST SAFE)
+            throw new RuntimeException(ex);
+        }
     }
 }
