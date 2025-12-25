@@ -33,45 +33,39 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration
-    ) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
-            .csrf(csrf -> csrf.disable())
-            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
-            .sessionManagement(session ->
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .exceptionHandling(exception ->
-                    exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            )
-            .authorizeHttpRequests(auth -> auth
+        http.csrf(csrf -> csrf.disable());
 
-                // ✅ Swagger URLs (VERY IMPORTANT)
-                .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html"
-                ).permitAll()
+        http.authorizeHttpRequests(auth -> auth
+            // ✅ Swagger URLs
+            .requestMatchers(
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html"
+            ).permitAll()
 
-                // ✅ Auth URLs
-                .requestMatchers("/api/auth/**").permitAll()
+            // ✅ Public APIs
+            .requestMatchers("/api/auth/**", "/status", "/h2-console/**").permitAll()
 
-                // 🔒 All other requests
-                .anyRequest().authenticated()
-            );
-
-        // ✅ JWT Filter
-        http.addFilterBefore(
-                jwtAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter.class
+            // 🔒 Everything else needs JWT
+            .anyRequest().authenticated()
         );
+
+        http.exceptionHandling(ex ->
+            ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+        );
+
+        http.sessionManagement(session ->
+            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        );
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
