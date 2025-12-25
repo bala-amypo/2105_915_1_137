@@ -50,12 +50,13 @@ public class SecurityConfig {
                         "/v3/api-docs",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
-                        "/swagger-ui/**"
+                        "/swagger-ui/**",
+                        "/api/**"
                         
                 ).permitAll()
 
                 // ✅ Auth APIs
-                .requestMatchers("/api/auth/**", "/status", "/h2-console/**")
+                .requestMatchers("/api/auth/**", "/status", "/h2-console/**","/api/**")
                 .permitAll()
 
                 // 🔒 Everything else needs JWT
