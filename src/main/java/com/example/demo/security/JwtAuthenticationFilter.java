@@ -32,9 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    // ✅ REQUIRED FOR SWAGGER, AUTH & H2
+    // ✅ FIX #1 — MUST declare throws ServletException
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
+    protected boolean shouldNotFilter(HttpServletRequest request)
+            throws ServletException {
 
         String path = request.getServletPath();
 
@@ -45,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || path.startsWith("/h2-console");
     }
 
+    // ✅ FIX #2 — catch ServletException internally
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -52,7 +54,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws IOException {
 
         try {
-
             String requestTokenHeader = request.getHeader("Authorization");
             String username = null;
             String jwtToken = null;
