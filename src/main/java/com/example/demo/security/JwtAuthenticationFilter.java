@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    // ✅ FIX #1 — MUST declare throws ServletException
+    // ✅ REQUIRED for Spring Security 6
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request)
             throws ServletException {
@@ -46,60 +46,55 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || path.startsWith("/h2-console");
     }
 
-    // ✅ FIX #2 — catch ServletException internally
+    // ✅ MUST declare ServletException here
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
-            throws IOException {
+            throws ServletException, IOException {
 
-        try {
-            String requestTokenHeader = request.getHeader("Authorization");
-            String username = null;
-            String jwtToken = null;
+        String requestTokenHeader = request.getHeader("Authorization");
+        String username = null;
+        String jwtToken = null;
 
-            if (requestTokenHeader != null &&
-                    requestTokenHeader.startsWith("Bearer ")) {
+        if (requestTokenHeader != null &&
+                requestTokenHeader.startsWith("Bearer ")) {
 
-                jwtToken = requestTokenHeader.substring(7);
-                try {
-                    username = jwtUtil.getUsernameFromToken(jwtToken);
-                } catch (Exception e) {
-                    logger.error("Unable to get JWT Token", e);
-                }
+            jwtToken = requestTokenHeader.substring(7);
+            try {
+                username = jwtUtil.getUsernameFromToken(jwtToken);
+            } catch (Exception e) {
+                logger.error("Unable to get JWT Token", e);
             }
-
-            if (username != null &&
-                    SecurityContextHolder.getContext()
-                            .getAuthentication() == null) {
-
-                UserDetails userDetails =
-                        userDetailsService.loadUserByUsername(username);
-
-                if (jwtUtil.validateToken(jwtToken, userDetails)) {
-
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    userDetails,
-                                    null,
-                                    userDetails.getAuthorities()
-                            );
-
-                    authentication.setDetails(
-                            new WebAuthenticationDetailsSource()
-                                    .buildDetails(request)
-                    );
-
-                    SecurityContextHolder.getContext()
-                            .setAuthentication(authentication);
-                }
-            }
-
-            filterChain.doFilter(request, response);
-
-        } catch (ServletException ex) {
-            logger.error("ServletException in JWT filter", ex);
-            throw new RuntimeException(ex);
         }
+
+        if (username != null &&
+                SecurityContextHolder.getContext()
+                        .getAuthentication() == null) {
+
+            UserDetails userDetails =
+                    userDetailsService.loadUserByUsername(username);
+
+            if (jwtUtil.validateToken(jwtToken, userDetails)) {
+
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource()
+                                .buildDetails(request)
+                );
+
+                SecurityContextHolder.getContext()
+                        .setAuthentication(authentication);
+            }
+        }
+
+        // ✅ This is why ServletException MUST be declared
+        filterChain.doFilter(request, response);
     }
 }
