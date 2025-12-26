@@ -41,9 +41,5 @@ public class UserAccountController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userAccountService.deleteUser(id);
-        return ResponseEntity.noContent().build();
-    }
+    
 }
