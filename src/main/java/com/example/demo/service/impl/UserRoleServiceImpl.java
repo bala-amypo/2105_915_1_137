@@ -51,37 +51,4 @@ public class UserRoleServiceImpl implements UserRoleService {
         }
         userRoleRepository.deleteById(id);
     }
-    
-    @Override
-    public List<UserRole> getAllUserRoles() {
-        return userRoleRepository.findAll();
-    }
-    
-    @Override
-    public UserRole getUserRoleById(Long id) {
-        return getMappingById(id);
-    }
-    
-    @Override
-    public UserRole createUserRole(UserRole userRole) {
-        return assignRole(userRole);
-    }
-    
-    @Override
-    public UserRole updateUserRole(Long id, UserRole userRole) {
-        UserRole existing = getMappingById(id);
-        existing.setUser(userRole.getUser());
-        existing.setRole(userRole.getRole());
-        return userRoleRepository.save(existing);
-    }
-    
-    @Override
-    public void deleteUserRole(Long id) {
-        removeRole(id);
-    }
-    
-    @Override
-    public List<UserRole> getRolesByUser(Long userId) {
-        return getRolesForUser(userId);
-    }
 }
