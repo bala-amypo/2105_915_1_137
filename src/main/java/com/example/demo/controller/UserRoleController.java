@@ -15,34 +15,24 @@ public class UserRoleController {
     @Autowired
     private UserRoleService userRoleService;
 
-    @GetMapping
-    public ResponseEntity<List<UserRole>> getAllUserRoles() {
-        return ResponseEntity.ok(userRoleService.getAllUserRoles());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserRole> getUserRoleById(@PathVariable Long id) {
-        return ResponseEntity.ok(userRoleService.getUserRoleById(id));
-    }
-
     @PostMapping
-    public ResponseEntity<UserRole> createUserRole(@RequestBody UserRole userRole) {
-        return ResponseEntity.ok(userRoleService.createUserRole(userRole));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<UserRole> updateUserRole(@PathVariable Long id, @RequestBody UserRole userRole) {
-        return ResponseEntity.ok(userRoleService.updateUserRole(id, userRole));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserRole(@PathVariable Long id) {
-        userRoleService.deleteUserRole(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UserRole> assignRole(@RequestBody UserRole userRole) {
+        return ResponseEntity.ok(userRoleService.assignRole(userRole));
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<UserRole>> getRolesByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(userRoleService.getRolesByUser(userId));
+    public ResponseEntity<List<UserRole>> getRolesForUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(userRoleService.getRolesForUser(userId));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserRole> getMappingById(@PathVariable Long id) {
+        return ResponseEntity.ok(userRoleService.getMappingById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeRole(@PathVariable Long id) {
+        userRoleService.removeRole(id);
+        return ResponseEntity.noContent().build();
     }
 }

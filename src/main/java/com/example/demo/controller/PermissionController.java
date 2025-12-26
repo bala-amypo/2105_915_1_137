@@ -35,6 +35,12 @@ public class PermissionController {
         return ResponseEntity.ok(permissionService.updatePermission(id, permission));
     }
 
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivatePermission(@PathVariable Long id) {
+        permissionService.deactivatePermission(id);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePermission(@PathVariable Long id) {
         permissionService.deletePermission(id);

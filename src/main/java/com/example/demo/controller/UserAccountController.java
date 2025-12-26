@@ -35,6 +35,12 @@ public class UserAccountController {
         return ResponseEntity.ok(userAccountService.updateUser(id, user));
     }
 
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateUser(@PathVariable Long id) {
+        userAccountService.deactivateUser(id);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userAccountService.deleteUser(id);

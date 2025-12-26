@@ -35,6 +35,12 @@ public class RoleController {
         return ResponseEntity.ok(roleService.updateRole(id, role));
     }
 
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateRole(@PathVariable Long id) {
+        roleService.deactivateRole(id);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         roleService.deleteRole(id);
