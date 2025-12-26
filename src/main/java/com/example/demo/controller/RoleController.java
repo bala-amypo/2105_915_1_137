@@ -41,9 +41,5 @@ public class RoleController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
-        roleService.deleteRole(id);
-        return ResponseEntity.noContent().build();
-    }
+   
 }
