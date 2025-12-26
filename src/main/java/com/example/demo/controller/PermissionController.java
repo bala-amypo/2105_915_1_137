@@ -41,9 +41,5 @@ public class PermissionController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePermission(@PathVariable Long id) {
-        permissionService.deletePermission(id);
-        return ResponseEntity.noContent().build();
-    }
+    
 }
