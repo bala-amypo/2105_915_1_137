@@ -53,14 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
-        @Override
-protected boolean shouldNotFilter(HttpServletRequest request) {
-    String path = request.getServletPath();
-    return path.startsWith("/api/auth")
-        || path.startsWith("/swagger-ui")
-        || path.startsWith("/v3/api-docs")
-        || path.startsWith("/api/roles"); // 👈 ADD THIS
-}
+        
 
         try {
             filterChain.doFilter(request, response);
