@@ -36,7 +36,7 @@ public class UserAccount {
         this.updatedAt = Instant.now();
     }
     
-    // Getters and setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
